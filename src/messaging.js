@@ -8,7 +8,7 @@ module.exports = {
       deleteById: 'DELETE_BY_ID_REQUESTED',
     },
   },
-  
+
   queues: {
     user: 'request-user',
   },

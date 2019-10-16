@@ -16,7 +16,7 @@ module.exports = class UserController {
     const correlationId = uuidv4();
     const responseQueueName = await sendToQueue(channel, correlationId, requestQueueName, messages.getAll);
     const resp = await consumeResponse(channel, correlationId, responseQueueName);
-    
+
     reply
       .code(200)
       .header('Content-Type', 'application/json; charset=utf-8')
@@ -25,55 +25,44 @@ module.exports = class UserController {
 
   async getById({ params }, reply) {
     try {
-      const uri = `https://jsonplaceholder.typicode.com/users/${params.id}`;
-      const user = await requestPromise({
-        uri,
-        json: true,
-      });
 
       reply
         .code(200)
         .header('Content-Type', 'application/json; charset=utf-8')
-        .send(user);
+        .send({ id: params.id || null });
     } catch (err) {
       throw boom.boomify(err);
     }
   }
 
-  async insert({
-    params,
-  }, reply) {
+  async insert({ params }, reply) {
     try {
       reply
         .code(200)
         .header('Content-Type', 'application/json; charset=utf-8')
-        .send(params.id);
+        .send({ id: params.id || null });
     } catch (err) {
       throw boom.boomify(err);
     }
   }
 
-  async updateById({
-    params,
-  }, reply) {
+  async updateById({ params }, reply) {
     try {
       reply
         .code(200)
         .header('Content-Type', 'application/json; charset=utf-8')
-        .send(params.id);
+        .send({ id: params.id || null });
     } catch (err) {
       throw boom.boomify(err);
     }
   }
 
-  async deleteById({
-    params,
-  }, reply) {
+  async deleteById({ params }, reply) {
     try {
       reply
         .code(200)
         .header('Content-Type', 'application/json; charset=utf-8')
-        .send(params.id);
+        .send({ id: params.id || null });
     } catch (err) {
       throw boom.boomify(err);
     }
