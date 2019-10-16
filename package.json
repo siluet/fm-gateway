@@ -1,0 +1,39 @@
+{
+  "name": "@ecamdere/gateway",
+  "version": "0.0.1",
+  "description": "Gateway of the api platform",
+  "main": "./src/app.js",
+  "scripts": {
+    "dev": "NODE_ENV=dev NODE_DEBUG=dev  ./node_modules/.bin/nodemon src/app.js",
+    "inspect": "NODE_ENV=dev ./node_modules/.bin/nodemon --inspect src/app.js",
+    "lint": "./node_modules/.bin/eslint .",
+    "test": "./node_modules/.bin/eslint . && NODE_ENV=test jest --watchAll --verbose",
+    "start": "NODE_ENV=production node src/app.js"
+  },
+  "author": "Emre CAMDERE <ecamdere@gamehouse.com>",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.5.5",
+    "boom": "^7.3.0",
+    "emittery": "^0.5.1",
+    "fastify": "^2.10.0",
+    "fastify-env": "^1.0.1",
+    "fastify-helmet": "^3.0.1",
+    "fastify-plugin": "^1.6.0",
+    "fastify-swagger": "^2.4.0",
+    "make-promises-safe": "^5.1.0",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7",
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "eslint": "^6.5.1",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^22.19.0",
+    "eslint-plugin-security": "^1.4.0",
+    "jest": "^24.9.0",
+    "nodemon": "^1.19.4",
+    "supertest": "^4.0.2"
+  }
+}
