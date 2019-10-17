@@ -7,6 +7,8 @@ const appEnv = require('fastify-env');
 const appHelmet = require('fastify-helmet');
 
 const appAmqp = require('./plugins/amqp');
+const appLog = require('./plugins/amqp-log');
+const appTracing = require('./plugins/tracing');
 const appRoutes = require('./plugins/routes');
 
 
@@ -25,8 +27,11 @@ app
     confKey: 'config',
     schema: {
       type: 'object',
-      required: ['PORT', 'HOST', 'RABBITMQ_URL'],
+      required: ['NAME', 'PORT', 'HOST', 'RABBITMQ_URL'],
       properties: {
+        NAME: {
+          type: 'string',
+        },
         PORT: {
           type: 'string',
         },
@@ -62,6 +67,10 @@ app
       .register(appAmqp, {
         url: app.config.RABBITMQ_URL,
       })
+      .register(appLog, {
+        level: 'info'
+      })
+      .register(appTracing)
       .register(appRoutes);
   })
 

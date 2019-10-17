@@ -1,16 +1,16 @@
 {
-  "name": "@ecamdere/gateway",
+  "name": "@ecamdere/fm-gateway",
   "version": "0.0.1",
   "description": "Gateway of the api platform",
   "main": "./src/app.js",
   "scripts": {
-    "dev": "NODE_ENV=dev NODE_DEBUG=dev  ./node_modules/.bin/nodemon src/app.js",
+    "dev": "NODE_ENV=dev NODE_DEBUG=dev ./node_modules/.bin/nodemon src/app.js",
     "inspect": "NODE_ENV=dev ./node_modules/.bin/nodemon --inspect src/app.js",
     "lint": "./node_modules/.bin/eslint .",
     "test": "./node_modules/.bin/eslint . && NODE_ENV=test jest --watchAll --verbose",
     "start": "NODE_ENV=production node src/app.js"
   },
-  "author": "Emre CAMDERE <ecamdere@gamehouse.com>",
+  "author": "Emre CAMDERE <cemre79@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "amqplib": "^0.5.5",

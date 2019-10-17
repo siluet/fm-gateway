@@ -1,5 +1,7 @@
 const fastifyPlugin = require('fastify-plugin');
+
 const UserController = require('../controllers/UserController');
+const PingController = require('../controllers/Ping');
 
 
 async function fastifyRoutes(fastify, opts, next) {
@@ -7,7 +9,8 @@ async function fastifyRoutes(fastify, opts, next) {
   const currentVersion = 'v1';
 
   const userController = new UserController();
-
+  const pingController = new PingController();
+  
   const routes = [
     {
       method: 'GET',
@@ -22,7 +25,17 @@ async function fastifyRoutes(fastify, opts, next) {
 
     {
       method: 'GET',
-      url: '/ping',
+      url: '/pingself',
+      schema: {
+        response: {
+          200: {
+            type: 'object',
+            properties: {
+              ping: { type: 'string' }
+            }
+          }
+        }
+      },
       handler: (request, reply) => {
         reply
           .code(200)
@@ -31,6 +44,22 @@ async function fastifyRoutes(fastify, opts, next) {
             ping: 'pong',
           });
       },
+    },
+
+    {
+      method: 'GET',
+      url: '/ping',
+      schema: {
+        response: {
+          200: {
+            type: 'object',
+            properties: {
+              ping: { type: 'string' }
+            }
+          }
+        }
+      },
+      handler: pingController.pingAll,
     },
 
     {
