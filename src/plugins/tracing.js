@@ -2,7 +2,7 @@ const fastifyPlugin = require('fastify-plugin');
 const uuidv4 = require('uuid/v4');
 
 
-function tracing(fastify, options, next) {
+function fastifyTracing(fastify, options, next) {
 
   fastify.addHook('onRequest', (request, reply, done) => {
     const requestId = uuidv4();
@@ -12,37 +12,44 @@ function tracing(fastify, options, next) {
       fastify.decorate('reqid', requestId);
     }
 
-    console.log("*** onRequest " + requestId);
-    // console.log('body')
-    // console.log(request.body)
-    // console.log('query')
-    // console.log(request.query)
-    // console.log('params')
-    // console.log(request.params)
-    // console.log('headers')
-    // console.log(request.headers)
-    const requestData = `${request.raw.method} ${request.raw.hostname}${request.raw.url}`;
-    console.log(requestData);
-    console.log(request.req.ip);
+    fastify.amqplog.trace(['tracing', 'onRequest'], {
+      method: request.raw.method || '',
+      url: `${request.raw.hostname}${request.raw.url}`,
+      ip: request.req.ip,
+    });
+
     done();
   });
 
+
+  fastify.addHook('preHandler', (request, reply, done) => {
+    // some code
+    console.log('preHandler');
+    console.log(reply);
+
+    done();
+  });
+
+
   fastify.addHook('onResponse', (request, reply, done) => {
-    console.log('*** onResponse ' + fastify.reqid || '');
+    fastify.amqplog.trace(['tracing', 'onResponse']);
     done();
   });
 
   fastify.addHook('onError', (request, reply, error, done) => {
-    console.log('*** onError ' + fastify.reqid || '');
+    fastify.amqplog.trace(['tracing', 'onError']);
     done();
   });
 
   fastify.addHook('onClose', (instance, done) => {
-    console.log('*** onClose');
+    fastify.amqplog.trace(['tracing', 'onClose']);
     done();
   });
 
   next();
 }
 
-module.exports = fastifyPlugin(tracing);
+module.exports = fastifyPlugin(fastifyTracing, {
+  fastify: '>=2.0.0',
+  name: 'fastify-fm-tracing',
+});

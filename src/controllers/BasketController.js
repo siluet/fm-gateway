@@ -4,14 +4,15 @@ const { sendToQueue, consumeResponse } = require('../utils');
 
 
 const {
-  queues: { user: requestQueueName },
-  messages: { user: messages },
+  queues: { basket: requestQueueName },
+  messages: { basket: messages },
 } = require('../messaging');
 
+const controllerName = 'Basket';
 
-module.exports = class UserController {
+module.exports = class BasketController {
 
-  async getAll(req, reply) {
+  async getUserBasket(req, reply) {
     const { channel } = this.amqp;
     const correlationId = uuidv4();
     const responseQueueName = await sendToQueue(channel, correlationId, requestQueueName, messages.getAll);

@@ -15,7 +15,7 @@ const appRoutes = require('./plugins/routes');
 const start = async (port, host) => {
   try {
     const address = await app.listen(port, host);
-    app.log.info(`Gateway is listening on ${address}`);
+    app.log.info(`Gateway is listening at ${address}`);
   } catch (err) {
     app.log.error(err);
     process.exit(1);
@@ -52,7 +52,7 @@ app
     },
     data: process.env,
     dotenv: {
-      path: `${__dirname}/.env`,
+      path: '.env',
       debug: false,
     },
   })
@@ -67,9 +67,7 @@ app
       .register(appAmqp, {
         url: app.config.RABBITMQ_URL,
       })
-      .register(appLog, {
-        level: 'info'
-      })
+      .register(appLog)
       .register(appTracing)
       .register(appRoutes);
   })

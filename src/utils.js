@@ -17,7 +17,10 @@ module.exports = {
   sendToQueue:
     async (channel, correlationId, requestQueueName, action, params = null) => {
       // build message
-      const message = { id: correlationId, action, params };
+      const message = { id: correlationId, action };
+      if (params !== null) {
+        message.params = params;
+      }
       // Create response queue
       const { queue: responseQueueName } = await channel.assertQueue('', { exclusive: true });
 

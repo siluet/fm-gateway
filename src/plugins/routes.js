@@ -1,16 +1,18 @@
 const fastifyPlugin = require('fastify-plugin');
 
-const UserController = require('../controllers/UserController');
-const PingController = require('../controllers/Ping');
+const ProductController = require('../controllers/ProductController');
+const BasketController = require('../controllers/BasketController');
+const PingController = require('../controllers/PingController');
 
 
 async function fastifyRoutes(fastify, opts, next) {
 
   const currentVersion = 'v1';
 
-  const userController = new UserController();
+  const productController = new ProductController();
+  const basketController = new BasketController();
   const pingController = new PingController();
-  
+
   const routes = [
     {
       method: 'GET',
@@ -31,10 +33,10 @@ async function fastifyRoutes(fastify, opts, next) {
           200: {
             type: 'object',
             properties: {
-              ping: { type: 'string' }
-            }
-          }
-        }
+              ping: { type: 'string' },
+            },
+          },
+        },
       },
       handler: (request, reply) => {
         reply
@@ -54,48 +56,48 @@ async function fastifyRoutes(fastify, opts, next) {
           200: {
             type: 'object',
             properties: {
-              ping: { type: 'string' }
-            }
-          }
-        }
+              ping: { type: 'string' },
+            },
+          },
+        },
       },
       handler: pingController.pingAll,
     },
 
     {
       method: 'GET',
-      url: `/${currentVersion}/users`,
-      handler: userController.getAll,
+      url: `/${currentVersion}/products`,
+      handler: productController.getAll,
     },
 
-    {
-      method: 'GET',
-      url: `/${currentVersion}/users/:id`,
-      handler: userController.getById,
-    },
+    // {
+    //   method: 'GET',
+    //   url: `/${currentVersion}/products/:id`,
+    //   handler: catalogController.getById,
+    // },
 
-    {
-      method: 'POST',
-      url: `/${currentVersion}/users`,
-      schema: {
-        body: {
-          type: 'object',
-        },
-      },
-      handler: userController.insert,
-    },
+    // {
+    //   method: 'POST',
+    //   url: `/${currentVersion}/users`,
+    //   schema: {
+    //     body: {
+    //       type: 'object',
+    //     },
+    //   },
+    //   handler: basketController.insert,
+    // },
 
-    {
-      method: 'PUT',
-      url: `/${currentVersion}/users/:id`,
-      handler: userController.updateById,
-    },
+    // {
+    //   method: 'PUT',
+    //   url: `/${currentVersion}/users/:id`,
+    //   handler: Controller.updateById,
+    // },
 
-    {
-      method: 'DELETE',
-      url: `/${currentVersion}/users/:id`,
-      handler: userController.deleteById,
-    },
+    // {
+    //   method: 'DELETE',
+    //   url: `/${currentVersion}/users/:id`,
+    //   handler: userController.deleteById,
+    // },
   ];
 
 

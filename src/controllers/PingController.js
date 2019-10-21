@@ -3,7 +3,6 @@ const requestPromise = require('request-promise-native');
 
 const controllerName = 'Ping';
 
-
 module.exports = class PingController {
 
   async pingAll(req, reply) {
