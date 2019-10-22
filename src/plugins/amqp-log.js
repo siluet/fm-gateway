@@ -26,8 +26,6 @@ function fastifyAmqpLog(fastify, opts, next) {
 
     channel.assertExchange(exchange, 'topic', { durable: false });
     channel.publish(exchange, key, Buffer.from(JSON.stringify(message)));
-
-    console.log(message);
   }
 
   function log(level, data) {

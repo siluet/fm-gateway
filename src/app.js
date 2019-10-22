@@ -1,6 +1,6 @@
 require('make-promises-safe');
 const app = require('fastify')({
-  logger: process.env.NODE_ENV !== 'production', // { level: 'trace' },
+  logger: process.env.NODE_ENV !== 'production',
   ignoreTrailingSlash: true,
 });
 const appEnv = require('fastify-env');

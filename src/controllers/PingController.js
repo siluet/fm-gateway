@@ -1,5 +1,9 @@
-const boom = require('boom');
-const requestPromise = require('request-promise-native');
+const { sendToQueue, consumeResponse } = require('../utils');
+
+const {
+  queues,
+  messages: { ping: pingMessage },
+} = require('../messaging');
 
 const controllerName = 'Ping';
 
@@ -8,23 +12,30 @@ module.exports = class PingController {
   async pingAll(req, reply) {
     this.amqplog.trace([controllerName, 'pingAll'], 'start');
 
-    this.amqplog.info([controllerName, 'pingAll'], 'requested ping');
+    const correlationId = this.reqid || uuidv4();
+    const { channel } = this.amqp;
 
-    try {
-      const uri = 'https://jsonplaceholder.typicode.com/users';
-      const users = await requestPromise({
-        uri,
-        json: true,
+    const pingService = async(serviceName, queueName) => {
+      const start = new Date();
+      const responseQueueName = await sendToQueue(channel, correlationId, queueName, pingMessage);
+      const resp = await consumeResponse(channel, correlationId, responseQueueName);
+      return {
+        service: serviceName,
+        response: JSON.parse(resp.content.toString()),
+        responseTime: `${new Date() - start} ms`,
+      };
+    };
+
+    // List the service names to ping
+    const serviceNames = ['product', 'basket'];
+
+    Promise.all(serviceNames.map(serviceName => pingService(serviceName, queues[serviceName])))
+      .then((pongs) => {
+        reply
+          .code(200)
+          .header('Content-Type', 'application/json; charset=utf-8')
+          .send(pongs);
       });
-
-      reply
-        .code(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send(users);
-    } catch (err) {
-      throw boom.boomify(err);
-    }
-
   }
 
 };

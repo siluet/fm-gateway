@@ -21,7 +21,7 @@ async function fastifyRoutes(fastify, opts, next) {
         reply
           .code(200)
           .header('Content-Type', 'text/plain; charset=utf-8')
-          .send('Hello');
+          .send('Gateway up and running.');
       },
     },
 
@@ -51,30 +51,20 @@ async function fastifyRoutes(fastify, opts, next) {
     {
       method: 'GET',
       url: '/ping',
-      schema: {
-        response: {
-          200: {
-            type: 'object',
-            properties: {
-              ping: { type: 'string' },
-            },
-          },
-        },
-      },
       handler: pingController.pingAll,
     },
 
     {
       method: 'GET',
-      url: `/${currentVersion}/products`,
+      url: `/${currentVersion}/products/:uid`,
       handler: productController.getAll,
     },
 
-    // {
-    //   method: 'GET',
-    //   url: `/${currentVersion}/products/:id`,
-    //   handler: catalogController.getById,
-    // },
+    {
+      method: 'GET',
+      url: `/${currentVersion}/basket/:uid`,
+      handler: basketController.getById,
+    },
 
     // {
     //   method: 'POST',

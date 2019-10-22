@@ -14,7 +14,7 @@ module.exports = class BasketController {
 
   async getUserBasket(req, reply) {
     const { channel } = this.amqp;
-    const correlationId = uuidv4();
+    const correlationId = this.reqid || uuidv4();
     const responseQueueName = await sendToQueue(channel, correlationId, requestQueueName, messages.getAll);
     const resp = await consumeResponse(channel, correlationId, responseQueueName);
 
