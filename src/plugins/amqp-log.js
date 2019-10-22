@@ -10,15 +10,6 @@ function fastifyAmqpLog(fastify, opts, next) {
     trace: 'trace',
   };
 
-  const levelsNumbers = {
-    [levels.fatal]: 0,
-    [levels.error]: 2,
-    [levels.warning]: 4,
-    [levels.info]: 6,
-    [levels.debug]: 8,
-    [levels.trace]: 10,
-  };
-
   function publishMessage(appName, level, message) {
     const { channel } = fastify.amqp;
     const exchange = 'platform_logs';

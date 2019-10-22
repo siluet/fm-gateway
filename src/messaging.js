@@ -7,7 +7,7 @@ module.exports = {
     basket: {
       getAll: 'GET_ALL',
       add: 'ADD_TO',
-      delete: 'DELETE_FORM'
+      delete: 'DELETE_FORM',
     },
   },
 

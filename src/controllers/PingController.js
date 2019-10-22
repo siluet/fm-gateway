@@ -1,3 +1,4 @@
+const uuidv4 = require('uuid/v4');
 const { sendToQueue, consumeResponse } = require('../utils');
 
 const {
@@ -15,7 +16,7 @@ module.exports = class PingController {
     const correlationId = this.reqid || uuidv4();
     const { channel } = this.amqp;
 
-    const pingService = async(serviceName, queueName) => {
+    const pingService = async (serviceName, queueName) => {
       const start = new Date();
       const responseQueueName = await sendToQueue(channel, correlationId, queueName, pingMessage);
       const resp = await consumeResponse(channel, correlationId, responseQueueName);
@@ -29,7 +30,7 @@ module.exports = class PingController {
     // List the service names to ping
     const serviceNames = ['product', 'basket'];
 
-    Promise.all(serviceNames.map(serviceName => pingService(serviceName, queues[serviceName])))
+    Promise.all(serviceNames.map((serviceName) => pingService(serviceName, queues[serviceName])))
       .then((pongs) => {
         reply
           .code(200)

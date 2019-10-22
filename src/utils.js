@@ -2,7 +2,7 @@ module.exports = {
 
   // consume response messages from RabbitMQ
   consumeResponse:
-    (channel, correlationId, queueName) => new Promise((resolve, reject) => {
+    (channel, correlationId, queueName) => new Promise((resolve) => {
       channel.consume(queueName, (message) => {
         if (message && message.properties.correlationId === correlationId) {
           resolve(message);

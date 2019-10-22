@@ -28,7 +28,6 @@ module.exports = {
     "one-var": "off",
     "padded-blocks": "off",
     "require-await": "off",
-    "no-extra-parens": "error",
     "no-unexpected-multiline": "error",
     "no-plusplus": ["error", {
       "allowForLoopAfterthoughts": true

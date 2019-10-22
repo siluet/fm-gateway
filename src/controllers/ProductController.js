@@ -16,7 +16,9 @@ module.exports = class ProductController {
 
     const { channel } = this.amqp;
     const correlationId = this.reqid || uuidv4();
-    const responseQueueName = await sendToQueue(channel, correlationId, requestQueueName, messages.getAll, { userid: req.params.uid });
+    const responseQueueName = await sendToQueue(
+      channel, correlationId, requestQueueName, messages.getAll, { userid: req.params.uid }
+    );
     const resp = await consumeResponse(channel, correlationId, responseQueueName);
 
     // console.log( JSON.parse(resp.content.toString()) );
