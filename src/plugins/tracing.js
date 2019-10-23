@@ -21,15 +21,6 @@ function fastifyTracing(fastify, options, next) {
     done();
   });
 
-
-  // fastify.addHook('preHandler', (request, reply, done) => {
-  //   // some code
-  //   console.log('preHandler');
-  //   console.log(reply);
-  //   done();
-  // });
-
-
   fastify.addHook('onResponse', (request, reply, done) => {
     fastify.amqplog.trace(['tracing', 'onResponse']);
     done();

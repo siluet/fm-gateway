@@ -10,7 +10,7 @@ const {
 
 const controllerName = 'Basket';
 
-module.exports = {
+module.exports = class BasketController {
 
   async getByUserId(req, reply) {
     this.amqplog.trace([controllerName, 'getByUserId'], 'start');
@@ -36,7 +36,7 @@ module.exports = {
       .code(200)
       .header('Content-Type', 'application/json; charset=utf-8')
       .send(JSON.parse(resp.content.toString()));
-  },
+  }
 
 
   async add({ params: { uid, pid } }, reply) {
@@ -73,7 +73,7 @@ module.exports = {
     reply
       .code(201)
       .send();
-  },
+  }
 
 
   async delete({ params: { uid, pid } }, reply) {
@@ -111,6 +111,6 @@ module.exports = {
     reply
       .code(204)
       .send();
-  },
+  }
 
 };

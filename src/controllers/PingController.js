@@ -1,6 +1,7 @@
 const uuidv4 = require('uuid/v4');
 const { sendToQueue, consumeResponse } = require('../utils');
 
+
 const {
   queues,
   messages: { ping: pingMessage },
@@ -8,7 +9,7 @@ const {
 
 const controllerName = 'Ping';
 
-module.exports = class PingController {
+module.exports = {
 
   async pingAll(req, reply) {
     this.amqplog.trace([controllerName, 'pingAll'], 'start');
@@ -17,12 +18,25 @@ module.exports = class PingController {
     const { channel } = this.amqp;
 
     const pingService = async (serviceName, queueName) => {
+      // Keeping time to calculate response time
       const start = new Date();
       const responseQueueName = await sendToQueue(channel, correlationId, queueName, pingMessage);
-      const resp = await consumeResponse(channel, correlationId, responseQueueName);
+
+      let strResp = null;
+      try {
+        const resp = await consumeResponse(channel, correlationId, responseQueueName, 6000);
+        strResp = JSON.parse(resp.content.toString());
+      } catch (err) {
+        // Unable to get a response in 6 seconds.
+        this.amqplog.fatal(
+          [controllerName, 'pingAll'],
+          `Unable to ping ${serviceName}: ${err.message ? err.message : err}`,
+        );
+      }
+
       return {
         service: serviceName,
-        response: JSON.parse(resp.content.toString()),
+        response: strResp,
         responseTime: `${new Date() - start} ms`,
       };
     };
@@ -37,6 +51,6 @@ module.exports = class PingController {
           .header('Content-Type', 'application/json; charset=utf-8')
           .send(pongs);
       });
-  }
+  },
 
 };

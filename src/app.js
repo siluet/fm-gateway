@@ -6,6 +6,7 @@ const app = require('fastify')({
 const appEnv = require('fastify-env');
 const appHelmet = require('fastify-helmet');
 
+const appErrorHandler = require('./plugins/error-handler');
 const appAmqp = require('./plugins/amqp');
 const appLog = require('./plugins/amqp-log');
 const appTracing = require('./plugins/tracing');
@@ -23,6 +24,7 @@ const start = async (port, host) => {
 };
 
 app
+  .register(appErrorHandler)
   .register(appEnv, {
     confKey: 'config',
     schema: {
@@ -59,7 +61,8 @@ app
 
   .after((err) => {
     if (err) {
-      console.error(err);
+      // An error on config params.
+      throw new Error(`Error occurred while parsing config params: ${err.message ? err.message : err}`);
     }
 
     app
@@ -74,7 +77,7 @@ app
 
   .ready((err) => {
     if (err) {
-      console.error(err);
+      throw new Error(`Error occurred while registering plugins: ${err.message ? err.message : err}`);
     }
     start(app.config.PORT, app.config.HOST);
   });

@@ -1,3 +1,5 @@
+// It would be better to share this constants across services to keep integrity of system.
+
 module.exports = {
   messages: {
     ping: 'PING',
@@ -5,9 +7,9 @@ module.exports = {
       getAll: 'GET_ALL',
     },
     basket: {
-      getAll: 'GET_ALL',
-      add: 'ADD_TO',
-      delete: 'DELETE_FORM',
+      getByUserId: 'GET_BY_USERID',
+      add: 'ADD',
+      delete: 'DELETE',
     },
   },
 

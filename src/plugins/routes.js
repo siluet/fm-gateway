@@ -1,17 +1,13 @@
 const fastifyPlugin = require('fastify-plugin');
 
-const ProductController = require('../controllers/ProductController');
-const BasketController = require('../controllers/BasketController');
-const PingController = require('../controllers/PingController');
+const productController = require('../controllers/productController');
+const basketController = require('../controllers/basketController');
+const pingController = require('../controllers/pingController');
 
 
 async function fastifyRoutes(fastify, opts, next) {
 
   const currentVersion = 'v1';
-
-  const productController = new ProductController();
-  const basketController = new BasketController();
-  const pingController = new PingController();
 
   const routes = [
     {
@@ -62,9 +58,28 @@ async function fastifyRoutes(fastify, opts, next) {
 
     {
       method: 'GET',
-      url: `/${currentVersion}/basket/:uid`,
-      handler: basketController.getById,
+      url: `/${currentVersion}/products/`,
+      handler: productController.getAll,
     },
+
+    {
+      method: 'GET',
+      url: `/${currentVersion}/basket/:uid`,
+      handler: basketController.getByUserId,
+    },
+
+    {
+      method: ['POST', 'GET'],
+      url: `/${currentVersion}/basket/:uid/:pid`,
+      handler: basketController.add,
+    },
+    {
+      method: 'DELETE',
+      url: `/${currentVersion}/basket/:uid/:pid`,
+      handler: basketController.delete,
+    },
+
+
 
     // {
     //   method: 'POST',
