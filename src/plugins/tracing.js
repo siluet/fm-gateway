@@ -7,8 +7,11 @@ function fastifyTracing(fastify, options, next) {
   fastify.addHook('onRequest', (request, reply, done) => {
     const requestId = uuidv4();
     if (fastify.hasDecorator('reqid')) {
+      // if request id exists, just update it
+      // eslint-disable-next-line no-param-reassign
       fastify.reqid = requestId;
     } else {
+      // assign new request id to app
       fastify.decorate('reqid', requestId);
     }
 

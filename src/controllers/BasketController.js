@@ -1,6 +1,6 @@
 const boom = require('boom');
 const uuidv4 = require('uuid/v4');
-const { sendToQueue, consumeResponse } = require('../utils');
+const utils = require('../utils');
 
 
 const {
@@ -14,17 +14,16 @@ module.exports = {
 
   async getByUserId(req, reply) {
     this.amqplog.trace([controllerName, 'getByUserId'], 'start');
+
     const { channel } = this.amqp;
     const correlationId = this.reqid || uuidv4();
-    const responseQueueName = await sendToQueue(
-      channel, correlationId, requestQueueName, messages.getByUserId, { uid: req.params.uid }
-    );
+    const params = { uid: req.params.uid };
 
     let resp = null;
     try {
-      resp = await consumeResponse(channel, correlationId, responseQueueName, 6000);
+      resp = await utils.rpc(channel, correlationId, requestQueueName, messages.getByUserId, params);
     } catch (err) {
-      // Unable to get a response in 6 seconds.
+      // Unable to get a response in given time.
       this.amqplog.fatal(
         [controllerName, 'getByUserId'],
         `Unable to get response from basket service: ${err.message ? err.message : err}`,
@@ -35,7 +34,7 @@ module.exports = {
     reply
       .code(200)
       .header('Content-Type', 'application/json; charset=utf-8')
-      .send(JSON.parse(resp.content.toString()));
+      .send(JSON.parse(resp));
   },
 
 
@@ -44,13 +43,9 @@ module.exports = {
     const { channel } = this.amqp;
     const correlationId = this.reqid || uuidv4();
 
-    const responseQueueName = await sendToQueue(
-      channel, correlationId, requestQueueName, messages.add, { uid, pid }
-    );
-
     let resp = null;
     try {
-      resp = await consumeResponse(channel, correlationId, responseQueueName, 6000);
+      resp = await utils.rpc(channel, correlationId, requestQueueName, messages.add, { uid, pid });
     } catch (err) {
       // Unable to get a response in 6 seconds.
       this.amqplog.fatal(
@@ -60,7 +55,8 @@ module.exports = {
       throw boom.boomify(err);
     }
 
-    if (!JSON.parse(resp.content.toString())) {
+    // check returned result
+    if (!JSON.parse(resp)) {
       // failed for some reason. log & inform user.
       this.amqplog.warning(
         [controllerName, 'add'],
@@ -81,13 +77,9 @@ module.exports = {
     const { channel } = this.amqp;
     const correlationId = this.reqid || uuidv4();
 
-    const responseQueueName = await sendToQueue(
-      channel, correlationId, requestQueueName, messages.delete, { uid, pid }
-    );
-
     let resp = null;
     try {
-      resp = await consumeResponse(channel, correlationId, responseQueueName, 6000);
+      resp = await utils.rpc(channel, correlationId, requestQueueName, messages.delete, { uid, pid });
     } catch (err) {
       // Unable to get a response in 6 seconds.
       this.amqplog.fatal(
@@ -97,12 +89,12 @@ module.exports = {
       throw boom.boomify(err);
     }
 
-    if (!JSON.parse(resp.content.toString())) {
+    if (!JSON.parse(resp)) {
       // failed for some reason. log & inform user.
       this.amqplog.warning(
         [controllerName, 'delete'],
         `Unable to delete product #${pid} from user #${uid} basket`,
-        
+
       );
       throw boom.boomify(new Error('An error occurred. Please try again later.'));
     }

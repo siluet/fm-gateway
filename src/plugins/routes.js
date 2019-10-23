@@ -79,30 +79,6 @@ async function fastifyRoutes(fastify, opts, next) {
       handler: basketController.delete,
     },
 
-
-
-    // {
-    //   method: 'POST',
-    //   url: `/${currentVersion}/users`,
-    //   schema: {
-    //     body: {
-    //       type: 'object',
-    //     },
-    //   },
-    //   handler: basketController.insert,
-    // },
-
-    // {
-    //   method: 'PUT',
-    //   url: `/${currentVersion}/users/:id`,
-    //   handler: Controller.updateById,
-    // },
-
-    // {
-    //   method: 'DELETE',
-    //   url: `/${currentVersion}/users/:id`,
-    //   handler: userController.deleteById,
-    // },
   ];
 
 
