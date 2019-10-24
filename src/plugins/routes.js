@@ -69,7 +69,7 @@ async function fastifyRoutes(fastify, opts, next) {
     },
 
     {
-      method: ['POST', 'GET'],
+      method: ['POST', 'PUT'],
       url: `/${currentVersion}/basket/:uid/:pid`,
       handler: basketController.add,
     },

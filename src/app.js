@@ -4,6 +4,7 @@ const app = require('fastify')({
   ignoreTrailingSlash: true,
 });
 const appEnv = require('fastify-env');
+const appCors = require('fastify-cors');
 const appHelmet = require('fastify-helmet');
 
 const appErrorHandler = require('./plugins/error-handler');
@@ -66,7 +67,13 @@ app
     }
 
     app
-      .register(appHelmet)
+      .register(appCors, { 
+        origin: '*',
+      })
+      .register(appHelmet, {
+        frameguard: false,
+        permittedCrossDomainPolicies: false
+      })
       .register(appAmqp, {
         url: app.config.RABBITMQ_URL,
       })
