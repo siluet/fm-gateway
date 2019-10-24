@@ -35,5 +35,9 @@
     "jest": "^24.9.0",
     "nodemon": "^1.19.4",
     "supertest": "^4.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/siluet/fm-gateway.git"
   }
 }
