@@ -78,4 +78,5 @@ function fastifyAmqpLog(fastify, opts, next) {
 module.exports = fastifyPlugin(fastifyAmqpLog, {
   fastify: '>=2.0.0',
   name: 'fastify-fm-amqp-log',
+  dependencies: ['fastify-fm-amqp'],
 });

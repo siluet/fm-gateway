@@ -22,15 +22,16 @@
     "fastify-env": "^1.0.1",
     "fastify-helmet": "^3.0.2",
     "fastify-plugin": "^1.6.0",
+    "fastify-swagger": "^2.4.0",
     "make-promises-safe": "^5.1.0",
     "p-timeout": "^3.2.0",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "eslint": "^6.5.1",
+    "eslint": "^6.6.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jest": "^22.20.0",
+    "eslint-plugin-jest": "^23.0.2",
     "eslint-plugin-security": "^1.4.0",
     "jest": "^24.9.0",
     "nodemon": "^1.19.4",

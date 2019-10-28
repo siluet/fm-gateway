@@ -6,12 +6,14 @@ const app = require('fastify')({
 const appEnv = require('fastify-env');
 const appCors = require('fastify-cors');
 const appHelmet = require('fastify-helmet');
+const appSwagger = require('fastify-swagger');
 
 const appErrorHandler = require('./plugins/error-handler');
 const appAmqp = require('./plugins/amqp');
 const appLog = require('./plugins/amqp-log');
 const appTracing = require('./plugins/tracing');
 const appRoutes = require('./plugins/routes');
+const { options: swaggerOptions } = require('./config/swagger');
 
 
 const start = async (port, host) => {
@@ -67,18 +69,19 @@ app
     }
 
     app
-      .register(appCors, { 
+      .register(appCors, {
         origin: '*',
       })
       .register(appHelmet, {
         frameguard: false,
-        permittedCrossDomainPolicies: false
+        permittedCrossDomainPolicies: false,
       })
       .register(appAmqp, {
         url: app.config.RABBITMQ_URL,
       })
       .register(appLog)
       .register(appTracing)
+      .register(appSwagger, swaggerOptions(app.config))
       .register(appRoutes);
   })
 

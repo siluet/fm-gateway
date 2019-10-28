@@ -13,6 +13,10 @@ async function fastifyRoutes(fastify, opts, next) {
     {
       method: 'GET',
       url: '/',
+      schema: {
+        description: 'Welcome page of gateway',
+        summary: 'A warm welcome',
+      },
       handler: (request, reply) => {
         reply
           .code(200)
