@@ -13,6 +13,10 @@ API-Gateway acts as the single entrypoint into the system.
 
 ### Functionalities
 
+  - Endpoints documentation:
+    **URL:** `0.0.0.0:3003/docs`
+    **Method:** GET
+
   - Healthcheck of gateway itself:
     **URL:** `0.0.0.0:3003/pingself`
     **Method:** GET

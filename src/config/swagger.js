@@ -5,11 +5,11 @@ exports.options = (config) => ({
     info: {
       title: 'API Gateway',
       description: 'Gateway of the api platform',
-      version: config.VER
+      version: config.VER,
     },
     host: `${config.HOST}:${config.PORT}`,
     schemes: ['http'],
     consumes: ['application/json'],
-    produces: ['application/json']
-  }
+    produces: ['application/json'],
+  },
 });
